@@ -1,0 +1,59 @@
+Dungeon Crawl Stone Soup — Species Aptitudes Guide
+
+Aptitudes determine how quickly each species learns skills. A positive aptitude
+means the species learns that skill faster than average; a negative aptitude
+means slower. An aptitude of 0 is average learning speed.
+
+Skills Available in Crawl:
+
+Combat Skills:
+  Fighting — General combat proficiency, affects all attack types.
+  Short Blades — Daggers, short swords, and similar weapons.
+  Long Blades — Swords, great swords, and longswords.
+  Axes — Axes and greataxes.
+  Maces and Flails — Maces, clubs, flails, and morning stars.
+  Polearms — Spears, halberds, and similar long weapons.
+  Staves — Quarterstaves and magical staves.
+  Ranged Weapons — Bows, crossbows, and slings.
+  Throwing — Thrown weapons like javelins and grenades.
+  Unarmed Combat — Fighting with bare hands and tentacles.
+
+Defence Skills:
+  Armour — Reduces damage taken when wearing armour.
+  Dodging — Chance to avoid being hit entirely.
+  Shields — Using shields to block incoming attacks.
+  Stealth — Moving without being detected by monsters.
+
+Magic Skills:
+  Spellcasting — General spellcasting ability (affects mana and cast chance).
+  Conjurations — Spells that create destructive energy (fireballs, etc).
+  Hexes — Spells that debilitate and control enemies.
+  Summoning — Spells that call allies to fight for you.
+  Necromancy — Spells involving death and undead.
+  Translocations — Spells for movement (teleport, blink, etc).
+  Fire Magic — Spells using fire and heat.
+  Ice Magic — Spells using cold and ice.
+  Air Magic — Spells using wind and lightning.
+  Earth Magic — Spells using earth and stone.
+  Alchemy — Spells involving transmutation and chemistry.
+  Forgecraft — Spells for creating and enhancing equipment.
+
+Other Skills:
+  Invocations — Using divine abilities granted by your god.
+  Evocations — Using magical items and wands.
+  Shapeshifting — Transforming into different forms.
+
+Species Notes:
+  Humans have average aptitudes across all skills but gain experience 15% faster.
+  Elves excel at magic but struggle with physical combat.
+  Dwarves are sturdy fighters but poor at magic.
+  Octopuses have unique tentacle-based combat and excellent swimming.
+  Nagas have natural poison resistance and good stealth.
+  Trolls have incredible regeneration and brute strength.
+  Formicids are natural diggers with unique foraging abilities.
+
+Hepliaklqana's Ancestor:
+  The Ancestor companion of Hepliaklqana adapts its form based on the player's
+  progress. It can become a Knight (melee specialist), Battlemage (combat caster),
+  or Hexer (crowd control specialist). The Ancestor's capabilities scale with
+  the player's own skill development and experience level.

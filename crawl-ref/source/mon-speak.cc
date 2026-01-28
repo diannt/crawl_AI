@@ -26,6 +26,7 @@
 #include "state.h"
 #include "stringutil.h"
 #include "view.h"
+#include "ai_companion.h"
 
 // Try the exact key lookup along with the entire prefix list.
 // If that fails, start ignoring hostile/religion/branch/silence, in that order,
@@ -351,9 +352,43 @@ void maybe_mons_speaks(monster* mons)
     if (mons->attitude == ATT_NEUTRAL)
         return;
 
-    // too annoying for a permanent companion without more thought put into it
+    // AI companion: Hepliaklqana ancestor speaks via RAG + LLM pipeline
     if (mons_is_hepliaklqana_ancestor(mons->type))
+    {
+        // Capture current game state
+        GameState gs = ai_companion::capture_game_state();
+
+        // Build a context string from what triggered this speech opportunity.
+        // Use visible threats as the primary trigger if present, otherwise
+        // generate a generic ambient prompt.
+        std::string trigger_input;
+        if (!gs.visible_threats.empty())
+        {
+            trigger_input = "I see ";
+            for (size_t i = 0; i < gs.visible_threats.size(); ++i)
+            {
+                if (i > 0) trigger_input += ", ";
+                trigger_input += gs.visible_threats[i];
+            }
+            trigger_input += " nearby.";
+        }
+        else
+        {
+            trigger_input = "The dungeon is quiet. What should I do next?";
+        }
+
+        // Run the full pipeline: embed -> RAG -> LLM -> parse
+        auto response = ai_companion::run_companion_pipeline(trigger_input, gs);
+
+        // Dispatch based on action
+        std::vector<std::string> action_log;
+        ai_companion::dispatch_action(
+            response.action, response.chat, response.payload, action_log);
+
+        // The dispatch_action (production path) handles mpr internally.
+        // In test mode it just logs. Either way we're done.
         return;
+    }
 
     int chance = 21; // this is a very old number; no idea why it was chosen
 
