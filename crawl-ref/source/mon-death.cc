@@ -7,6 +7,7 @@
 
 #include "mon-death.h"
 
+#include "ai_rewards.h"
 #include "act-iter.h"
 #include "areas.h"
 #include "arena.h"
@@ -3626,6 +3627,33 @@ item_def* monster_die(monster& mons, killer_type killer,
              && mons.type == MONS_ORC_APOSTLE)
     {
         beogh_follower_banished(mons);
+    }
+
+    // AI companion XP sharing: when an enemy dies and the Hepliaklqana
+    // ancestor is alive, share half the kill's XP with the player as a
+    // co-player bonus. Gated behind ai_companion_enabled().
+    if (ai_companion::ai_companion_enabled()
+        && real_death
+        && !mons.friendly()
+        && hepliaklqana_ancestor() != MID_NOBODY)
+    {
+        int raw_xp = exp_value(mons);
+        if (raw_xp > 0)
+        {
+            int share = raw_xp / 2;
+            gain_exp(share);
+
+            // Generate roleplay narration via LLM
+            std::string mon_name = mons.name(NAME_PLAIN);
+            std::string narration = ai_companion::narrate_event(
+                "XP_SHARE",
+                "Defeated " + mon_name + " gaining " + to_string(share) + " shared XP",
+                hepliaklqana_ally_name()
+            );
+            mprf("[Ancestor] %s", narration.c_str());
+            fprintf(stderr, "[AI_COMPANION] XP_SHARE:+%d xp from %s (turn %d)\n",
+                    share, mon_name.c_str(), (int)you.num_turns);
+        }
     }
 
     // If we kill an invisible monster reactivate autopickup.

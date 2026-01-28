@@ -31,6 +31,9 @@
 
 #include "ability.h"
 #include "abyss.h"
+#include "ai_rewards.h"
+#include "god-companions.h"
+#include "religion.h"
 #include "act-iter.h"
 #include "adjust.h"
 #include "areas.h"
@@ -474,6 +477,14 @@ NORETURN static void _launch_game()
         if (crawl_state.game_is_hints())
             _startup_hints_mode();
         _take_starting_note();
+
+        // AI companion: auto-commit to Hepliaklqana and trigger ancestor
+        // spawn on turn 1. Disabled via env AI_COMPANION=0.
+        if (ai_companion::ai_companion_enabled())
+        {
+            you.religion = GOD_HEPLIAKLQANA;
+            mprf("[AI_COMPANION] Hepliaklqana's ancestor will join you.");
+        }
     }
     else
         hints_load_game();

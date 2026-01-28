@@ -53,6 +53,9 @@
 #include "test_ai_companion.cc"
 
 // ---------------------------------------------------------------------------
-// Phase 4 — (placeholder: uncomment when test_ai_rewards.cc exists)
+// Phase 4 — AI rewards, XP sharing, item grant mechanics
 // ---------------------------------------------------------------------------
-// #include "test_ai_rewards.cc"
+#ifndef AI_REWARDS_TEST
+#define AI_REWARDS_TEST
+#endif
+#include "test_ai_rewards.cc"
