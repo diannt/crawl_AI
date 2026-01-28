@@ -3644,7 +3644,7 @@ item_def* monster_die(monster& mons, killer_type killer,
             gain_exp(share);
 
             // Generate roleplay narration via LLM
-            std::string mon_name = mons.name(NAME_PLAIN);
+            std::string mon_name = mons.name(DESC_PLAIN);
             std::string narration = ai_companion::narrate_event(
                 "XP_SHARE",
                 "Defeated " + mon_name + " gaining " + to_string(share) + " shared XP",

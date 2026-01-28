@@ -356,7 +356,7 @@ void maybe_mons_speaks(monster* mons)
     if (mons_is_hepliaklqana_ancestor(mons->type))
     {
         // Capture current game state
-        GameState gs = ai_companion::capture_game_state();
+        ai_companion::GameState gs = ai_companion::capture_game_state();
 
         // Build a context string from what triggered this speech opportunity.
         // Use visible threats as the primary trigger if present, otherwise

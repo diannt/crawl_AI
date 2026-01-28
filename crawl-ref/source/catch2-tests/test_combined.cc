@@ -8,8 +8,8 @@
  * because all Phase headers use inline/static functions).
  *
  * Compile (all phases together):
- *   g++ -std=c++17 -DCATCH_CONFIG_MAIN -DAI_COMPANION_TEST \
- *       -I ../contrib -I .. \
+ *   g++ -std=c++17 -DCATCH_CONFIG_MAIN -DAI_COMPANION_TEST -DAI_REWARDS_TEST \
+ *       -DAI_SCREENSHOT_TEST -I ../contrib -I .. \
  *       test_combined.cc catch_amalgamated.cc -o test_combined -lpthread
  *
  *   AI_CLIENT_DRY_RUN=1 ./test_combined
@@ -22,11 +22,8 @@
  *   Phase 1: [ai_client] [singleton] [embed] [search] [llm] [fallback] [latency]
  *   Phase 2: [ingest] [rst_strip] [chunker]
  *   Phase 3: [companion] [action_parse] [action_string] [state] [json] [prompt] [dispatch] [pipeline]
- *
- * Adding Phase 4:
- *   1. Create test_ai_rewards.cc with [rewards] tags
- *   2. Add #include "test_ai_rewards.cc" below
- *   3. Recompile
+ *   Phase 4: [rewards] [gate] [resolve] [grant] [xp] [quest] [narrate]
+ *   Phase 5: [screenshot] [parse] [scenario] [observation]
  */
 
 #ifndef CATCH_CONFIG_MAIN
@@ -59,3 +56,11 @@
 #define AI_REWARDS_TEST
 #endif
 #include "test_ai_rewards.cc"
+
+// ---------------------------------------------------------------------------
+// Phase 5 — Screenshot processing + gameplay scenario observation (TDD)
+// ---------------------------------------------------------------------------
+#ifndef AI_SCREENSHOT_TEST
+#define AI_SCREENSHOT_TEST
+#endif
+#include "test_screenshot_processor.cc"
