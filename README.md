@@ -4,6 +4,35 @@
 
 Dungeon Crawl Stone Soup is a game of dungeon exploration, combat and magic, involving characters of diverse skills, worshipping deities of great power and caprice. To win, you'll need to be a master of tactics and strategy, and prevail against overwhelming odds.
 
+## Key Features & Optimizations (Fork Enhancements)
+
+This fork introduces an advanced AI Co-Player system integrated directly into Dungeon Crawl Stone Soup:
+
+### AI Companion System
+*   **Hepliaklqana Ancestor Integration**: The ancestor companion is now powered by a RAG-based AI pipeline.
+*   **Architecture**:
+    *   **LLM Backend**: Uses **Gemma 3** (via Ollama) for intelligent response generation.
+    *   **RAG Pipeline**: **Qdrant** vector database integration for lore-accurate roleplaying and game knowledge.
+    *   **Context Awareness**: Real-time analysis of game state (inventory, nearby threats, player health) to generate relevant advice.
+
+### Interaction & Mechanics
+*   **Advanced Signals**: The companion can trigger specific game actions based on analysis:
+    *   **WARN_THREAT**: Identifies and warns about dangerous monsters in view.
+    *   **HEAL_SUGGEST**: Monitors player HP and suggests healing or retreat when critical.
+    *   **GRANT_REWARD**: Can grant items contextually based on narrative triggers.
+    *   **XP_SHARE**: Implements a 50/50 XP split mechanic between player and ancestor.
+*   **Narrative Continuity**: Quest logging and event narration (`CHAT`) that maintains context across turns.
+
+### Engineering & Infrastructure
+*   **Standalone Utilities**: `ingest_lore` binary for processing and indexing game texts into Qdrant.
+*   **Networking**: Custom `AIClient` singleton for robust HTTP communication with model services.
+*   **Testing Suite**: Comprehensive **Catch2** test suite covering:
+    *   Networking & Embeddings
+    *   Lore Ingestion & Chunking
+    *   Companion Dispatch Logic
+    *   Reward & XP Mechanics
+*   **Observation Hooks**: `ai_screenshot` system for automated visual analysis and gameplay validation.
+
 ## Contents
 
 1. [How to Play](#how-to-play)
