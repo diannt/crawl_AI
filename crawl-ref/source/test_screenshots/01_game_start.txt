@@ -1,0 +1,40 @@
+                                     AICompTest the Shield-Bearer
+                                     Human of Hepliaklqana ......
+                                     Health: 18/18     ========================
+                                     Magic:  1/1       ========================
+                                     AC:  6            Str: 16
+                                     EV:  7            Int: 8
+                                     SH:  4            Dex: 12
+                                     XL:  1 Next:  0%  Place: Dungeon:1
+              ####                   Noise: ---------  Time: 0.0 (0.0)
+              #..#                   a) +0 long sword
+              +.@#                   Nothing quivered
+              #..#
+              ####
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Welcome, AICompTest the Human Fighter.
+ The Orb of Zot is coveted for many reasons. Will you seize it for your own?
+ Press ? for a list of commands and other information.
+ Found a staircase leading out of the dungeon.
+_[AI_COMPANION] Hepliaklqana's ancestor will join you.
+
+
+
+
+

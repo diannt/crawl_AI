@@ -38,6 +38,9 @@ enum class AncestorAction
     NUM_ACTIONS
 };
 
+// Forward declaration — global scope (actual definition in monster.h)
+struct monster;
+
 // ---------------------------------------------------------------------------
 // Action parsing helpers
 // ---------------------------------------------------------------------------
@@ -163,8 +166,7 @@ void dispatch_action(AncestorAction action,
                      std::vector<std::string>& log_out);
 
 // Phase 2: Movement dispatch — sets monster target based on claude -p direction
-struct monster;  // forward declaration for engine-only builds
-void dispatch_companion_movement(monster* mons, const std::string& direction);
+void dispatch_companion_movement(::monster* mons, const std::string& direction);
 
 // Phase 3: Commentary dispatch — outputs conversational text to message log
 void dispatch_commentary(const std::string& commentary);

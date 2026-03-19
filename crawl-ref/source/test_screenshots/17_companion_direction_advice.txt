@@ -1,0 +1,40 @@
+                                     ChatTest the Shield-Bearer        *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: 16/16     ========================
+              #. .#                  Magic:  1/1       ========================
+              #. .#                  AC:  6 (25%)      Str: 16
+              #. .#                  EV:  7            Int: 8
+              #.#.#                  SH:  4            Dex: 12
+              #...#                  XL:  1 Next:  0%  Place: Dungeon:1
+              #...#                  Noise:  0 ------  Time: 0.0 (0.0)
+              #..R#                  a) +0 long sword
+              #.@.#                  Nothing quivered
+              #####
+
+                                     R   Bintanath the ancestor
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ You can now swap creatures with your ancestor.
+ You can now heal and protect your ancestor.
+_You now drain nearby creatures when transferring your ancestor.
+ Enter note: /c Hello ancestor\! What do you think of this dungeon?
+ Companion says: Greetings, descendant. These halls echo with memories older than stone — tread
+_carefully, for the dungeon tests the unwary.
+ Enter note: /c Should we go north or south? I see a corridor both ways.
+ Companion says: The southern passage carries an older draft—these stones remember footsteps there
+_less often. Let us head south, descendant.
+

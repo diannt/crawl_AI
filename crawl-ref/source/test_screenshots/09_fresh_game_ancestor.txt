@@ -1,0 +1,40 @@
+                                     TestHep the Ruffian               *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: 14/14     ========================
+                                     Magic:  1/1       ========================
+                                     AC:  2 (19%)      Str: 14
+                                     EV: 11            Int: 10
+                                     SH:  0            Dex: 12
+              ##+##                  XL:  1 Next:  0%  Place: Dungeon:1
+             ##..R##                 Noise:  0 ------  Time: 0.0 (0.0)
+             #.....#                 -) Nothing wielded
+             #.ß@ß.#                 Nothing quivered
+             #.....#                 Quill
+             #######
+                                     R   Kaya the ancestor
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Enter new piety value (current = 0, Enter for 0):
+ Setting piety to 200.
+ Hepliaklqana forms a fragment of your life essence into the memory of your ancestor, Kaya!
+ You can now recall your ancestor.
+ You can now remember your ancestor's identity.
+ You may now remember your ancestor's life.
+ You can now swap creatures with your ancestor.
+ You can now heal and protect your ancestor.
+_You now drain nearby creatures when transferring your ancestor.
+

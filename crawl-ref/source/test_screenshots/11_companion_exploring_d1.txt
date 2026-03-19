@@ -1,0 +1,40 @@
+                                     TestHep the Ruffian               *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: 14/14     ========================
+                                     Magic:  1/1       ========================
+                                     AC:  2 (19%)      Str: 14
+                                     EV: 11            Int: 10
+                                     SH:  0            Dex: 12
+                                     XL:  1 Next:  0%  Place: Dungeon:1
+                   #                 Noise:  0 ------  Time: 5.0 (1.0)
+             #####.+                 -) Nothing wielded
+             #..@..#                 Nothing quivered
+            ##R###.#                 Quill
+           ##...## #
+           #.....#                   R   Kaya the ancestor
+           #.ß<ß.#
+           #.....#
+           #######
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Companion says: The first floor lies quiet before us — a rare mercy. Keep that potion of
+_lignification close; it may buy us time if we stumble into something we cannot outrun.
+ There is an open door here.
+_Key pressed, stopping explore.
+ Companion says: The air stirs faintly from the south—I sense open passages that way. Stay close,
+ and I will guard your flank.
+ Companion says: The halls are quiet for now, but don't let that lull you into carelessness —
+ Dungeon:1 won't stay peaceful for long. Hold onto that potion of lignification; it could save your
+_life if we're cornered by something nasty deeper down.
+

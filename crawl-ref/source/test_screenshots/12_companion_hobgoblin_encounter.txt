@@ -1,0 +1,40 @@
+                                     TestHep the Ruffian               *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: 14/14     ========================
+          ####     ...#              Magic:  1/1       ========================
+           ....   #.#.               AC:  2 (19%)      Str: 14
+            ...   ...                EV: 11            Int: 10
+             ..###..                 SH:  0            Dex: 12
+              .....                  XL:  1 Next:  0%  Place: Dungeon:1
+               ...                   Noise:  0 ------  Time: 8.0 (1.0)
+               #.#                   -) Nothing wielded
+           #####@+                   Nothing quivered
+           #...R.#                   Quill
+          ##'###.#
+         ##...##.#                   R   Kaya the ancestor
+         #.....#.#
+         #.ß<ß.#.#
+         #.....#..
+         #######.#
+               #.#
+
+
+
+
+
+
+
+
+
+
+
+ Companion says: A mere hobgoblin dares challenge our line? Stand firm — I'll engage it directly.
+ Companion says: A hobgoblin lurks nearby — hardly a worthy foe, but do not grow careless even on
+ the first floor. Stand beside me and we shall dispatch it together; save that potion of
+_lignification for a far more desperate hour.
+ Companion says: The air stirs faintly from the south—I sense passages yet untrodden. Let us press
+ that way, but stay watchful; even Dungeon:1 holds surprises for the unwary.
+ Companion says: The halls are quiet for now — a good start. Keep that potion of lignification
+ close; it's no healing draught, but rooting yourself in place can buy time if something nasty
+_rounds a corner.
+

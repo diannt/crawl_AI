@@ -1,0 +1,40 @@
+                                     FinalTest the Shield-Bearer       *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: 16/16     ========================
+                                     Magic:  1/1       ========================
+                                     AC:  6 (25%)      Str: 16
+         .                           EV:  7            Int: 8
+         ..                          SH:  4            Dex: 12
+         ...                         XL:  1 Next:  0%  Place: Dungeon:1
+           ..        #               Noise:  0 ------  Time: 10.0 (2.0)
+         .###.######.####            a) +0 long sword
+         .......@........            Nothing quivered
+         .###.##..##....
+               ##.#### #
+                #....#               R   Publius the ancestor
+                ###.##
+               ###.R#
+              ##....#.###
+              #..<......#
+              #.....##....
+            ......###  ...
+          .....#.##     .#
+
+
+
+
+
+
+
+
+
+ deeper while fortune favors us.
+ Companion says: The first floor lies quiet before us — a rare mercy. Keep your blade ready and save
+_those potions of might for when we truly need them; the dungeon only grows crueler from here.
+ Companion says: The halls are still, but silence in the dungeon is never to be trusted. Let us
+ press south — I sense open ground that way, and we should map what we can before darker things
+ stir.
+ Companion says: The halls of Dungeon:1 lie quiet for now, but do not let your guard falter — these
+ early passages breed complacency in the unwary. Our blades are sharp and your health is full; let
+_us press onward before fortune shifts.
+

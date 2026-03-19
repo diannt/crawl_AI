@@ -1,0 +1,40 @@
+                                     TestHep the Ruffian               *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: 14/14     ========================
+              #.      .#             Magic:  1/1       ========================
+              ..    .#.#             AC:  2 (19%)      Str: 14
+          #####.    ...#             EV: 11            Int: 10
+          ......   #.#.#             SH:  0            Dex: 12
+           #....   ....#>            XL:  1 Next:  0%  Place: Dungeon:1
+             #..###..#...            Noise:  2 =-----  Time: 13.0 (1.0)
+             #...........            -) Nothing wielded
+             ##.@.g......            Nothing quivered
+              ###R#......            Quill
+            #####.'......
+            #.....#......            R   Kaya the ancestor
+           ##'###.##+####            g   hobgoblin (ally target)
+          ##...##.#
+          #.....#.#
+          #.ß<ß.#.#
+          #.....#..
+          #######.#
+                #.#
+
+
+
+
+
+
+
+
+
+ Companion says: A hobgoblin blocks our path — nothing we can't handle together at full strength.
+ Stay close and let me draw its attention while you strike.
+_The hobgoblin barely misses you.
+ Companion says: A hobgoblin — no real threat to us. Let me engage it directly while you support
+ from behind.
+ Companion says: A hobgoblin lurks nearby — nothing we can't handle together, but don't
+ underestimate its speed. Stay close and let me draw its attention while you strike.
+ Kaya misses the hobgoblin.
+_The hobgoblin hits you but does no damage.
+

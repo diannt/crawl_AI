@@ -132,7 +132,7 @@ static coord_def direction_to_delta(const std::string& dir)
 // For FOLLOW: targets the player position.
 // For STAY: no target change.
 // ---------------------------------------------------------------------------
-void dispatch_companion_movement(monster* mons, const std::string& direction)
+void dispatch_companion_movement(::monster* mons, const std::string& direction)
 {
     if (!mons) return;
 

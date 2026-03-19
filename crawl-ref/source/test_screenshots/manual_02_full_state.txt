@@ -1,0 +1,40 @@
+                                     TestHep the Ruffian               *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: 14/14     ========================
+                                     Magic:  1/1       ========================
+                     .#              AC:  2 (19%)      Str: 14
+                   .#.#              EV: 11            Int: 10
+         #####     ...#              SH:  0            Dex: 12
+         ......   #.#.#              XL:  1 Next:  0%  Place: Dungeon:1
+          #....   ....#>             Noise:  0 ------  Time: 11.0 (1.0)
+            #..###..#...             -) Nothing wielded
+            #...@.......             Nothing quivered
+            ##...g......             Quill
+             ###.#......
+           #####.R......             R   Kaya the ancestor
+           #.....#......             g   hobgoblin (ally target)
+          ##'###.##+####
+         ##...##.#
+         #.....#.#
+         #.ß<ß.#.#
+         #.....#..
+         #######.#
+
+
+
+
+
+
+
+
+
+ carefully, descendant.
+ Companion says: The halls are quiet for now, but do not let that lull you into carelessness —
+ Dungeon:1 always hides something hungry around the next corner. I sense no threats nearby, so let
+ us explore while your strength is full.
+_Something unseen breaks down the door.
+ Companion says: A hobgoblin — no real threat to us. Let me handle this one, stay close.
+ Companion says: A hobgoblin lurks nearby — nothing we can't handle together, but don't
+ underestimate it this early. Stay close and let me take the first blow; at full health we're in
+_good shape, though save that potion of lignification for a real emergency deeper down.
+

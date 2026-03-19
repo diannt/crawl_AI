@@ -1,0 +1,40 @@
+                                     AICompTest the Shield-Bearer      *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: 16/16     ========================
+                                     Magic:  1/1       ========================
+                                     AC:  6 (25%)      Str: 16
+                                     EV:  7            Int: 8
+                                     SH:  4            Dex: 12
+                                     XL:  1 Next:  0%  Place: Dungeon:1
+              ####                   Noise:  6 ==----  Time: 4.9 (1.3)
+              #..#                   a) +0 long sword
+              +R@#                   Nothing quivered
+              #.O#
+              ####
+                                     R   Cuahtemoc the ancestor
+                                     O   ogre (ally target)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Thought so.
+ Companion says: That ogre hits like a boulder — let me draw its attention while you flank. Stay
+ sharp, descendant.
+ Companion says: An ogre lurks nearby — those brutes hit far harder than anything else on this
+ floor. Keep your buckler raised and let me engage first; if things turn dire, quaff one of those
+ potions of might and we will cut it down together.
+_Cuahtemoc hits the ogre but does no damage.
+_An ogre is nearby!
+_An ogre is nearby!
+

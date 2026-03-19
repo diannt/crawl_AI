@@ -1,0 +1,40 @@
+                                     AICompTest the Shield-Bearer      *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: 16/16     ========================
+                                     Magic:  1/1       ========================
+                                     AC:  6 (25%)      Str: 16
+                                     EV:  7            Int: 8
+                                     SH:  4            Dex: 12
+                                     XL:  1 Next:  0%  Place: Dungeon:1
+              ####                   Noise:  0 ------  Time: 0.0 (0.0)
+              #.R#                   a) +0 long sword
+              +.@#                   Nothing quivered
+              #..#
+              ####
+                                     R   Cuahtemoc the ancestor
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Enter new piety value (current = 0, Enter for 0):
+ Setting piety to 200.
+ Hepliaklqana forms a fragment of your life essence into the memory of your ancestor, Cuahtemoc!
+ You can now recall your ancestor.
+ You can now remember your ancestor's identity.
+ You may now remember your ancestor's life.
+ You can now swap creatures with your ancestor.
+ You can now heal and protect your ancestor.
+_You now drain nearby creatures when transferring your ancestor.
+

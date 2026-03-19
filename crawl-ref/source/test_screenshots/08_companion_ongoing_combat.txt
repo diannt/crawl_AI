@@ -1,0 +1,40 @@
+Gear: 3/52 gear slots    (Left/Right to switch category)
+Hand Weapons   (go to first with ))
+ a - a +0 long sword (weapon)
+Armour         (go to first with [)
+ b - a +0 scale mail (worn)
+ c - a +0 buckler (worn)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

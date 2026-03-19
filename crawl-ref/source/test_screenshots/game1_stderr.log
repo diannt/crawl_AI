@@ -1,0 +1,57 @@
+[CLAUDE_ORCH] Executing claude -p (prompt length: 1797)
+[CLAUDE_ORCH] Success: 7692.1ms, output=276 bytes
+[AI_COMPANION] pipeline: claude_p=7692.1ms action=WARN_THREAT dir=ATTACK_ogre
+[AI_COMPANION] DISPATCH:[WARN_THREAT] That ogre hits like a cave-in — let me engage it first with my buckler raised while you flank from the side.
+[AI_COMPANION] MOVE:ATTACK_ogre -> (78,35)
+[CLAUDE_ORCH] Executing claude -p (prompt length: 1503)
+[CLAUDE_ORCH] Success: 7487.5ms, output=284 bytes
+[AI_COMPANION] commentary: 7487.6ms success=yes
+[AI_COMPANION] COMMENTARY: An ogre lurks nearby — those brutes hit hard enough to fell the unwary in just a few blows. Keep your buckler raised and let me draw its attention; if things turn dire, quaff one of those potions of might so we can cut it down before it cuts us.
+[CLAUDE_ORCH] Executing claude -p (prompt length: 1797)
+[CLAUDE_ORCH] Success: 7394.3ms, output=214 bytes
+[AI_COMPANION] pipeline: claude_p=7394.3ms action=WARN_THREAT dir=ATTACK_ogre
+[AI_COMPANION] DISPATCH:[WARN_THREAT] That ogre will crush us if we let it swing first — I'll charge in and draw its attention, you flank it!
+[AI_COMPANION] MOVE:ATTACK_ogre -> (78,35)
+[CLAUDE_ORCH] Executing claude -p (prompt length: 1503)
+[CLAUDE_ORCH] Success: 11179.3ms, output=217 bytes
+[AI_COMPANION] commentary: 11179.4ms success=yes
+[AI_COMPANION] COMMENTARY: An ogre this early is no small threat — one swing of its club could cleave half your life away. Quaff a potion of might before engaging, and let me stand between you and its reach.
+[CLAUDE_ORCH] Executing claude -p (prompt length: 1797)
+[CLAUDE_ORCH] Success: 8698.0ms, output=209 bytes
+[AI_COMPANION] pipeline: claude_p=8698.0ms action=WARN_THREAT dir=ATTACK_ogre
+[AI_COMPANION] DISPATCH:[WARN_THREAT] That ogre hits like a boulder — let me draw its attention while you flank. Stay sharp, descendant.
+[AI_COMPANION] MOVE:ATTACK_ogre -> (78,35)
+[CLAUDE_ORCH] Executing claude -p (prompt length: 1503)
+[CLAUDE_ORCH] Success: 9243.0ms, output=264 bytes
+[AI_COMPANION] commentary: 9243.2ms success=yes
+[AI_COMPANION] COMMENTARY: An ogre lurks nearby — those brutes hit far harder than anything else on this floor. Keep your buckler raised and let me engage first; if things turn dire, quaff one of those potions of might and we will cut it down together.
+[CLAUDE_ORCH] Executing claude -p (prompt length: 1797)
+[CLAUDE_ORCH] Success: 7714.0ms, output=207 bytes
+[AI_COMPANION] pipeline: claude_p=7714.0ms action=WARN_THREAT dir=ATTACK_ogre
+[AI_COMPANION] DISPATCH:[WARN_THREAT] That ogre hits like a cave-in — let me draw its attention while you flank. Together we crush it!
+[AI_COMPANION] MOVE:ATTACK_ogre -> (78,35)
+[CLAUDE_ORCH] Executing claude -p (prompt length: 1503)
+[CLAUDE_ORCH] Success: 11779.2ms, output=270 bytes
+[AI_COMPANION] commentary: 11779.2ms success=yes
+[AI_COMPANION] COMMENTARY: An ogre this early is no trifle — its club can fell the unwary in two blows. Quaff a potion of might before we engage, and I will stand beside you; together we can bring it down, but do not hesitate to retreat if your health falters.
+[CLAUDE_ORCH] Executing claude -p (prompt length: 1797)
+[CLAUDE_ORCH] Success: 6825.9ms, output=204 bytes
+[AI_COMPANION] pipeline: claude_p=6826.0ms action=WARN_THREAT dir=ATTACK_ogre
+[AI_COMPANION] DISPATCH:[WARN_THREAT] That ogre hits like a collapsing tomb — let me engage it first while you flank from the side.
+[AI_COMPANION] MOVE:ATTACK_ogre -> (78,35)
+[CLAUDE_ORCH] Executing claude -p (prompt length: 1503)
+[CLAUDE_ORCH] Success: 10734.6ms, output=299 bytes
+[AI_COMPANION] commentary: 10734.6ms success=yes
+[AI_COMPANION] COMMENTARY: An ogre lurks ahead — those brutes strike with terrible force, so keep your buckler raised and let me flank the beast while you press with your blade. If the fight turns grim, quaff one of those potions of might; better to spend it now than die with a full pack.
+
+Crash caused by signal #15: Terminated
+
+We crashed! This is likely due to a bug in Crawl.
+Please submit a bug report to:
+    https://github.com/crawl/crawl/issues
+and include at least:
+- The crash report: /tmp/crawl_tui_1773934560/morgue/crash-AICompTest-20260319-084122.txt
+- Your save file: /tmp/crawl_tui_1773934560/saves/AICompTest.cs
+- Information about your computer and game version: Dungeon Crawl Stone Soup 0.32-ai-companion (Console)
+- A description of what you were doing when this crash occurred.
+

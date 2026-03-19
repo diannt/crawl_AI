@@ -1,0 +1,40 @@
+                                     TestHep the Ruffian               *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: 14/14     ========================
+             #.      .#              Magic:  1/1       ========================
+             ..    .#.#              AC:  2 (19%)      Str: 14
+         #####.    ...#              EV: 11            Int: 10
+         ......   #.#.#              SH:  0            Dex: 12
+          #....   ....#>             XL:  1 Next: 30%  Place: Dungeon:1
+            #..###..#...             Noise:  1 =-----  Time: 16.9 (0.9)
+            #...........             -) Nothing wielded
+            ##..@.......             Nothing quivered
+             ###R#......             Quill
+           #####.'......
+           #.....#......             R   Kaya the ancestor
+          ##'###.##+####
+         ##...##.#
+         #.....#.#
+         #.ß<ß.#.#
+         #.....#..
+         #######.#
+               #.#
+
+
+
+
+
+
+
+
+
+ Companion says: A hobgoblin — no real threat to us. Let me handle this one, stay close.
+ Companion says: A hobgoblin blocks our path — nothing we can't handle together at full strength.
+ Stay close and let me engage it first; save that potion of lignification for a real emergency
+ deeper in the dungeon.
+_Kaya closely misses the hobgoblin.
+_Unknown command.
+ You hit the hobgoblin.
+ You kill the hobgoblin!
+_[Ancestor] A worthy foe felled together — each victory strengthens the bond between us, descendant.
+

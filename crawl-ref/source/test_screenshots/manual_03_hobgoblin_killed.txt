@@ -1,0 +1,40 @@
+                                     TestHep the Ruffian               *WIZARD*
+                                     Human of Hepliaklqana ******
+             #.      .#              Health: 14/14     ========================
+             ..    .#.#              Magic:  1/1       ========================
+         #####.    ...#              AC:  2 (19%)      Str: 14
+         ......   #.#.#              EV: 11            Int: 10
+          #....   ....#>             SH:  0            Dex: 12
+            #..###..#...             XL:  1 Next: 30%  Place: Dungeon:1
+            #...........             Noise:  0 ------  Time: 17.9 (1.0)
+            ##..R.......             -) Nothing wielded
+             ###@#......             Nothing quivered
+           #####.'......             Quill
+           #.....#......
+          ##'###.##+####             R   Kaya the ancestor
+         ##...##.#
+         #.....#.#
+         #.ß<ß.#.#
+         #.....#..
+         #######.#
+               #.#
+
+
+
+
+
+
+
+
+
+
+_Unknown command.
+ You hit the hobgoblin.
+ You kill the hobgoblin!
+_[Ancestor] A worthy foe felled together — each victory strengthens the bond between us, descendant.
+ Companion says: The air stirs faintly from the south—I sense passages yet untrodden. Let us press
+ onward together, descendant.
+ Companion says: The halls are quiet for now — a good omen on these early floors, but stay sharp,
+ for Dungeon:1 can still surprise the unwary. I see you carry talismans and baubles; save that
+_potion of lignification for when we truly need to hold our ground.
+

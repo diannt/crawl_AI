@@ -1,0 +1,40 @@
+                                     AICompTest the Shield-Bearer      *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: 16/16     ========================
+                                     Magic:  1/1       ========================
+                                     AC:  6 (25%)      Str: 16
+                                     EV:  7            Int: 8
+                                     SH:  4            Dex: 12
+                                     XL:  1 Next:  0%  Place: Dungeon:1
+              ####                   Noise:  0 ------  Time: 0.0 (0.0)
+              #.R#                   a) +0 long sword
+              +.@#                   Nothing quivered
+              #.O#
+              ####
+                                     R   Cuahtemoc the ancestor
+                                     O   ogre (asleep)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ You can now recall your ancestor.
+ You can now remember your ancestor's identity.
+ You may now remember your ancestor's life.
+ You can now swap creatures with your ancestor.
+ You can now heal and protect your ancestor.
+_You now drain nearby creatures when transferring your ancestor.
+ Enter Wizard Command (? - help):
+ Enter monster name (or MONS spec) (? for help):
+_You encounter an ogre. It is wielding a +0 giant spiked club.
+

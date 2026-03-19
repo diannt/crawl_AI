@@ -1,0 +1,40 @@
+                                     AICompTest the Shield-Bearer      *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: -4/16     ------------------------
+                                     Magic:  1/1       ========================
+                                     AC:  6 (25%)      Str: 16
+                                     EV:  7            Int: 8
+                                     SH:  4            Dex: 12
+                                     XL:  1 Next:  0%  Place: Dungeon:1
+              ####                   Noise:  1 =-----  Time: 3.6 (0.0)
+              #..#                   a) +0 long sword
+              +R@#                   Nothing quivered
+              #.O#
+              ####
+                                     R   Cuahtemoc the ancestor
+                                     O   ogre (ally target)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Companion says: An ogre this early is no small threat — one swing of its club could cleave half
+ your life away. Quaff a potion of might before engaging, and let me stand between you and its
+ reach.
+_Cuahtemoc barely misses the ogre.
+ You hit the ogre.
+ The ogre is moderately wounded.
+ The ogre hits you with a +0 giant spiked club!!
+ Ouch! That really hurt!
+ Die?
+

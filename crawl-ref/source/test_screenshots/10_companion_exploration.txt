@@ -1,0 +1,40 @@
+                                     TestHep the Ruffian               *WIZARD*
+                                     Human of Hepliaklqana ******
+                                     Health: 14/14     ========================
+                                     Magic:  1/1       ========================
+                                     AC:  2 (19%)      Str: 14
+                                     EV: 11            Int: 10
+                                     SH:  0            Dex: 12
+                                     XL:  1 Next:  0%  Place: Dungeon:1
+                                     Noise:  0 ------  Time: 2.0 (2.0)
+              ##+##                  -) Nothing wielded
+             ##.@R##                 Nothing quivered
+             #.....#                 Quill
+             #.ß<ß.#
+             #.....#                 R   Kaya the ancestor
+             #######
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ carefully, descendant.
+ Companion says: The dungeon is quiet for now — a good start. Let us explore carefully; these early
+ floors can still surprise the unwary, and that potion of lignification might save your life if we
+_stumble into something nasty.
+_Key pressed, stopping explore.
+ Enter Wizard Command (? - help):
+_Kaya (40)(D:1)
+ Enter Wizard Command (? - help):
+_Kaya (40)(D:1)
+

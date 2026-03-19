@@ -1,0 +1,16 @@
+# Test init file for AI companion graphical testing
+# Minimal config to skip prompts and get into game fast
+
+# Auto-select character options
+name = AICompTest
+species = human
+background = fighter
+weapon = a
+
+# Skip startup messages
+default_manual_training = true
+explore_auto_rest = true
+
+# Make message log verbose for companion output
+more := false
+msg_condense_short = false

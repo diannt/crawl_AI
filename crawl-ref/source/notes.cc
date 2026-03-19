@@ -11,6 +11,7 @@
 #include <sstream>
 #include <vector>
 
+#include "ai_companion.h"
 #include "branch.h"
 #include "english.h"
 #include "hiscores.h"
@@ -589,6 +590,15 @@ void make_user_note()
     bool validline = !msgwin_get_line("Enter note: ", buf, sizeof(buf));
     if (!validline || (!*buf))
         return;
+
+    // AI companion: intercept @companion or /c commands
+    std::string input(buf);
+    if (ai_companion::is_companion_command(input))
+    {
+        ai_companion::player_to_companion(input);
+        return;
+    }
+
     Note unote(NOTE_USER_NOTE);
     unote.name = buf;
     // Only one screenshot a turn allowed
