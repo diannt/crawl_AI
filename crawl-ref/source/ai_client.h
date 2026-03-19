@@ -1,43 +1,24 @@
 /**
  * @file ai_client.h
- * @brief Thread-safe singleton HTTP client for LLM + vector DB access.
+ * @brief AI client interface — routes to ClaudeOrchestrator (default) or
+ *        legacy Ollama+Qdrant (behind QDRANT_ENABLED flag).
  *
- * Provides:
- *   - Embed(): text → 768-dim embedding via nomic-embed-text on Ollama
- *   - SearchLore(): embedding → concatenated lore text from Qdrant
- *   - QueryInternal(): prompt → JSON-structured LLM response via gemma3-tools
- *
- * Set env AI_CLIENT_DRY_RUN=1 to skip real HTTP calls (returns canned data).
- * All methods are thread-safe via internal mutex.
+ * Current sprint: `claude -p` via ClaudeOrchestrator is the sole backend.
+ * To restore Ollama/Qdrant, compile with -DQDRANT_ENABLED.
  */
 
 #pragma once
 
 #include <chrono>
 #include <cstdlib>
-#include <mutex>
 #include <string>
 #include <vector>
 
-#include "contrib/httplib.h"
 #include "contrib/nlohmann/json.hpp"
-
 using json = nlohmann::json;
 
 // ---------------------------------------------------------------------------
-// Configuration constants
-// ---------------------------------------------------------------------------
-static constexpr const char* OLLAMA_HOST  = "http://172.29.64.1:11434";
-static constexpr const char* QDRANT_HOST  = "http://localhost:6333";
-static constexpr const char* EMBED_MODEL  = "nomic-embed-text";
-static constexpr const char* LLM_MODEL    = "PetrosStav/gemma3-tools:4b";
-static constexpr const char* LORE_COLLECTION = "crawl_lore";
-static constexpr int         EMBED_DIM    = 768;
-static constexpr int         SEARCH_LIMIT = 5;
-static constexpr int         HTTP_TIMEOUT = 30; // seconds
-
-// ---------------------------------------------------------------------------
-// Latency tracking helper
+// Latency tracking helper (shared by both backends)
 // ---------------------------------------------------------------------------
 struct LatencyTimer
 {
@@ -58,27 +39,81 @@ struct LatencyTimer
     }
 };
 
-// ---------------------------------------------------------------------------
-// AIClient — singleton
-// ---------------------------------------------------------------------------
+// ===========================================================================
+// ACTIVE BACKEND: ClaudeOrchestrator (claude -p subprocess)
+// ===========================================================================
+#ifndef QDRANT_ENABLED
+
+#include "claude_orchestrator.h"
+
 class AIClient
 {
 public:
     static AIClient& instance()
     {
-        // C++11 guaranteed thread-safe local static initialization (Meyer's singleton)
         static AIClient client;
         return client;
     }
 
-    // Disallow copy/move
+    AIClient(const AIClient&) = delete;
+    AIClient& operator=(const AIClient&) = delete;
+
+    // Embed is a no-op in claude -p mode (no vector DB)
+    std::vector<float> Embed(const std::string&)
+    {
+        return {};
+    }
+
+    // SearchLore returns static lore context (no Qdrant)
+    std::string SearchLore(const std::vector<float>&)
+    {
+        return std::string(LORE_CONTEXT);
+    }
+
+    // QueryInternal routes to claude -p
+    std::string QueryInternal(const std::string& context)
+    {
+        LatencyTimer timer("CLAUDE_P");
+        auto result = ClaudeOrchestrator::instance().query_json(context);
+        return result.dump();
+    }
+
+private:
+    AIClient() = default;
+};
+
+#else
+// ===========================================================================
+// ARCHIVED BACKEND: Ollama + Qdrant (compile with -DQDRANT_ENABLED)
+// ===========================================================================
+
+#include <mutex>
+#include "contrib/httplib.h"
+
+// ---------------------------------------------------------------------------
+// Configuration constants (Ollama + Qdrant)
+// ---------------------------------------------------------------------------
+static constexpr const char* OLLAMA_HOST  = "http://172.29.64.1:11434";
+static constexpr const char* QDRANT_HOST  = "http://localhost:6333";
+static constexpr const char* EMBED_MODEL  = "nomic-embed-text";
+static constexpr const char* LLM_MODEL    = "PetrosStav/gemma3-tools:4b";
+static constexpr const char* LORE_COLLECTION = "crawl_lore";
+static constexpr int         EMBED_DIM    = 768;
+static constexpr int         SEARCH_LIMIT = 5;
+static constexpr int         HTTP_TIMEOUT = 30; // seconds
+
+class AIClient
+{
+public:
+    static AIClient& instance()
+    {
+        static AIClient client;
+        return client;
+    }
+
     AIClient(const AIClient&)            = delete;
     AIClient& operator=(const AIClient&) = delete;
 
-    /**
-     * Embed a text string into a 768-dimensional vector.
-     * Returns empty vector on failure.
-     */
     std::vector<float> Embed(const std::string& text)
     {
         if (is_dry_run()) return canned_vector();
@@ -118,10 +153,6 @@ public:
         }
     }
 
-    /**
-     * Search Qdrant crawl_lore collection with a query vector.
-     * Returns concatenated payload.text from top-k results.
-     */
     std::string SearchLore(const std::vector<float>& vec)
     {
         if (vec.empty()) return "";
@@ -170,10 +201,6 @@ public:
         }
     }
 
-    /**
-     * Send a structured prompt to the LLM and get a JSON response.
-     * On failure or parse error, returns a safe fallback JSON.
-     */
     std::string QueryInternal(const std::string& context)
     {
         if (is_dry_run()) return canned_llm_response();
@@ -202,10 +229,7 @@ public:
         {
             json resp = json::parse(res->body);
             std::string raw = resp.at("response").get<std::string>();
-
-            // Validate it's parseable JSON
             json parsed = json::parse(raw);
-            // Ensure required fields exist; default missing ones
             if (!parsed.contains("chat"))   parsed["chat"]    = "I sense the dungeon stirs...";
             if (!parsed.contains("action")) parsed["action"]  = "CHAT";
             if (!parsed.contains("payload")) parsed["payload"] = "";
@@ -234,9 +258,6 @@ private:
     httplib::Client  ollama_;
     httplib::Client  qdrant_;
 
-    // -----------------------------------------------------------------------
-    // Dry-run helpers (for testing without network)
-    // -----------------------------------------------------------------------
     static bool is_dry_run()
     {
         static const bool dry = (std::getenv("AI_CLIENT_DRY_RUN") != nullptr);
@@ -246,7 +267,7 @@ private:
     static std::vector<float> canned_vector()
     {
         std::vector<float> v(EMBED_DIM, 0.01f);
-        v[0] = 1.0f; // unit-ish for cosine compat
+        v[0] = 1.0f;
         fprintf(stderr, "[AI_COMPANION] EMBED: DRY_RUN %d dims\n", EMBED_DIM);
         return v;
     }
@@ -278,3 +299,5 @@ private:
         return resp.dump();
     }
 };
+
+#endif // QDRANT_ENABLED

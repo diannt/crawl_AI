@@ -21,7 +21,8 @@
 #include <vector>
 #include <map>
 
-#include "ai_client.h"   // AIClient singleton, json
+#include "ai_client.h"          // AIClient (routes to claude_orchestrator.h)
+#include "claude_orchestrator.h" // ClaudeOrchestrator singleton, LORE_CONTEXT
 
 // ---------------------------------------------------------------------------
 // Action enum — every action the LLM may request
@@ -193,16 +194,15 @@ static inline std::string build_prompt(const GameState& gs,
 }
 
 // ---------------------------------------------------------------------------
-// Full pipeline: input → embed → RAG → prompt → LLM → parse → dispatch
+// Full pipeline: input → prompt → claude -p → parse → dispatch
+// (Replaces old embed → RAG → Ollama pipeline)
 // ---------------------------------------------------------------------------
 struct CompanionResponse
 {
     std::string chat;
     AncestorAction action;
     std::string payload;
-    double embed_ms   = 0;
-    double search_ms  = 0;
-    double llm_ms     = 0;
+    double llm_ms = 0;
 };
 
 static inline CompanionResponse run_companion_pipeline(const std::string& player_input,
@@ -212,50 +212,30 @@ static inline CompanionResponse run_companion_pipeline(const std::string& player
     resp.action = AncestorAction::CHAT;
     resp.chat   = "I sense the dungeon stirs...";
 
-    // --- Step 1: Embed player input ---
+    // --- Step 1: Build prompt with inline lore context ---
+    std::string prompt = build_prompt(state, std::string(LORE_CONTEXT), player_input);
+
+    // --- Step 2: Query via claude -p ---
     auto t0 = std::chrono::steady_clock::now();
-    auto vec = AIClient::instance().Embed(player_input);
+    json result = ClaudeOrchestrator::instance().query_json(prompt);
     auto t1 = std::chrono::steady_clock::now();
-    resp.embed_ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
+    resp.llm_ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
 
-    if (vec.empty())
-    {
-        fprintf(stderr, "[AI_COMPANION] embed failed — using fallback dialogue\n");
-        return resp;
-    }
-
-    // --- Step 2: RAG search ---
-    auto t2 = std::chrono::steady_clock::now();
-    std::string lore = AIClient::instance().SearchLore(vec);
-    auto t3 = std::chrono::steady_clock::now();
-    resp.search_ms = std::chrono::duration<double, std::milli>(t3 - t2).count();
-
-    // --- Step 3: Build prompt ---
-    std::string prompt = build_prompt(state, lore, player_input);
-
-    // --- Step 4: LLM query ---
-    auto t4 = std::chrono::steady_clock::now();
-    std::string llm_raw = AIClient::instance().QueryInternal(prompt);
-    auto t5 = std::chrono::steady_clock::now();
-    resp.llm_ms = std::chrono::duration<double, std::milli>(t5 - t4).count();
-
-    // --- Step 5: Parse response ---
+    // --- Step 3: Parse response ---
     try
     {
-        json parsed = json::parse(llm_raw);
-        resp.chat    = parsed.value("chat", resp.chat);
-        std::string act_str = parsed.value("action", std::string("CHAT"));
+        resp.chat    = result.value("chat", resp.chat);
+        std::string act_str = result.value("action", std::string("CHAT"));
         resp.action  = parse_action(act_str);
-        resp.payload = parsed.value("payload", std::string(""));
+        resp.payload = result.value("payload", std::string(""));
     }
     catch (const std::exception& e)
     {
         fprintf(stderr, "[AI_COMPANION] parse error in pipeline: %s\n", e.what());
-        // Keep defaults: CHAT with fallback message
     }
 
-    fprintf(stderr, "[AI_COMPANION] pipeline: embed=%.1fms search=%.1fms llm=%.1fms action=%s\n",
-            resp.embed_ms, resp.search_ms, resp.llm_ms, action_to_string(resp.action).c_str());
+    fprintf(stderr, "[AI_COMPANION] pipeline: claude_p=%.1fms action=%s\n",
+            resp.llm_ms, action_to_string(resp.action).c_str());
 
     return resp;
 }
