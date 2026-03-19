@@ -117,16 +117,28 @@ static inline void dispatch_action(AncestorAction action,
     log_out.push_back(entry);
 }
 
+// Test stub for movement dispatch — logs direction
+struct monster;  // forward decl for test builds
+static inline void dispatch_companion_movement(monster*, const std::string& direction)
+{
+    fprintf(stderr, "[AI_COMPANION] TEST_MOVE:%s\n", direction.c_str());
+}
+
 #else
 // ---- Production: real engine calls (compiled only with game engine) ----
 
 // Forward declarations — these link against the crawl engine
-// They are defined in ai_companion.cc (see Phase 4 / engine linkage)
+// They are defined in ai_companion.cc
 GameState capture_game_state();
 void dispatch_action(AncestorAction action,
                      const std::string& chat,
                      const std::string& payload,
                      std::vector<std::string>& log_out);
+
+// Phase 2: Movement dispatch — sets monster target based on claude -p direction
+// Requires a pointer to the ancestor monster (from mon-speak.cc)
+struct monster;  // forward declaration for engine-only builds
+void dispatch_companion_movement(monster* mons, const std::string& direction);
 
 #endif
 

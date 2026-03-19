@@ -383,9 +383,8 @@ void maybe_mons_speaks(monster* mons)
         ai_companion::dispatch_action(
             response.action, response.chat, response.payload, action_log);
 
-        // Log directional decision for observation
-        fprintf(stderr, "[AI_COMPANION] DIRECTION:%s (from claude -p)\n",
-                response.direction.c_str());
+        // Apply directional movement to the ancestor monster
+        ai_companion::dispatch_companion_movement(mons, response.direction);
 
         return;
     }
