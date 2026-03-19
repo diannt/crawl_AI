@@ -130,6 +130,27 @@ static inline void dispatch_commentary(const std::string& commentary)
     fprintf(stderr, "[AI_COMPANION] TEST_COMMENTARY:%s\n", commentary.c_str());
 }
 
+// Test stubs for player-to-companion commands
+static inline bool is_companion_command(const std::string& input)
+{
+    if (input.size() < 3) return false;
+    if (input.substr(0, 11) == "@companion ") return true;
+    if (input.substr(0, 3) == "/c ") return true;
+    return false;
+}
+
+static inline std::string extract_companion_message(const std::string& input)
+{
+    if (input.substr(0, 11) == "@companion ")
+        return input.substr(11);
+    if (input.substr(0, 3) == "/c ")
+        return input.substr(3);
+    return input;
+}
+
+// player_to_companion test stub is defined after run_companion_pipeline
+// (see bottom of file)
+
 #else
 // ---- Production: real engine calls (compiled only with game engine) ----
 
@@ -147,6 +168,11 @@ void dispatch_companion_movement(monster* mons, const std::string& direction);
 
 // Phase 3: Commentary dispatch — outputs conversational text to message log
 void dispatch_commentary(const std::string& commentary);
+
+// Phase 4: Player-to-companion command processing
+bool is_companion_command(const std::string& input);
+std::string extract_companion_message(const std::string& input);
+void player_to_companion(const std::string& player_message);
 
 #endif
 
@@ -495,5 +521,27 @@ static inline CompanionResponse run_screen_pipeline(const std::string& screen_du
 
     return resp;
 }
+
+// ---------------------------------------------------------------------------
+// Test stub for player_to_companion (must come after run_companion_pipeline)
+// ---------------------------------------------------------------------------
+#ifdef AI_COMPANION_TEST
+static inline void player_to_companion(const std::string& player_message)
+{
+    std::string message;
+    if (player_message.substr(0, 11) == "@companion ")
+        message = player_message.substr(11);
+    else if (player_message.substr(0, 3) == "/c ")
+        message = player_message.substr(3);
+    else
+        message = player_message;
+
+    GameState gs = capture_game_state();
+    auto response = run_companion_pipeline(message, gs);
+    std::vector<std::string> action_log;
+    dispatch_action(response.action, response.chat, response.payload, action_log);
+    fprintf(stderr, "[AI_COMPANION] TEST_PLAYER_CMD:'%s'\n", message.c_str());
+}
+#endif
 
 } // namespace ai_companion

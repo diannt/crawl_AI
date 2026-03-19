@@ -74,19 +74,21 @@ void dispatch_action(AncestorAction action,
 
     const std::string& name = cached_ancestor_name();
 
-    // Production dispatch: print companion speech to game log
+    // Production dispatch: all companion output formatted as "Companion says:"
     switch (action)
     {
     case AncestorAction::WARN_THREAT:
-        mprf(MSGCH_WARN, "[%s] %s", name.c_str(), chat.c_str());
+        mprf(MSGCH_WARN, "Companion says: %s", chat.c_str());
+        break;
+    case AncestorAction::HEAL_SUGGEST:
+        mprf(MSGCH_PLAIN, "Companion says: %s", chat.c_str());
         break;
     case AncestorAction::CHAT:
-    case AncestorAction::HEAL_SUGGEST:
     case AncestorAction::GRANT_REWARD:
     case AncestorAction::QUEST_LOG:
     case AncestorAction::LORE_CITE:
     default:
-        mprf(MSGCH_PLAIN, "[%s] %s", name.c_str(), chat.c_str());
+        mprf(MSGCH_PLAIN, "Companion says: %s", chat.c_str());
         break;
     }
 
@@ -198,6 +200,46 @@ void dispatch_companion_movement(monster* mons, const std::string& direction)
     mons->target = new_target;
     fprintf(stderr, "[AI_COMPANION] MOVE:%s -> (%d,%d)\n",
             direction.c_str(), new_target.x, new_target.y);
+}
+
+// ---------------------------------------------------------------------------
+// Player-to-companion command processing
+// Detects "@companion <msg>" or "/c <msg>" in player input.
+// Routes to claude -p with full game context.
+// ---------------------------------------------------------------------------
+bool is_companion_command(const std::string& input)
+{
+    if (input.size() < 3) return false;
+    // Check for "@companion " or "/c " prefix
+    if (input.substr(0, 11) == "@companion ") return true;
+    if (input.substr(0, 3) == "/c ") return true;
+    return false;
+}
+
+std::string extract_companion_message(const std::string& input)
+{
+    if (input.substr(0, 11) == "@companion ")
+        return input.substr(11);
+    if (input.substr(0, 3) == "/c ")
+        return input.substr(3);
+    return input;
+}
+
+void player_to_companion(const std::string& player_message)
+{
+    GameState gs = capture_game_state();
+    std::string message = extract_companion_message(player_message);
+
+    // Run the full pipeline with the player's actual message
+    auto response = run_companion_pipeline(message, gs);
+
+    // Dispatch response formatted as "Companion says:"
+    std::vector<std::string> action_log;
+    dispatch_action(response.action, response.chat, response.payload, action_log);
+
+    fprintf(stderr, "[AI_COMPANION] PLAYER_CMD:'%s' -> action=%s dir=%s\n",
+            message.c_str(), action_to_string(response.action).c_str(),
+            response.direction.c_str());
 }
 
 } // namespace ai_companion
