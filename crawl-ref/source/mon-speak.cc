@@ -352,15 +352,13 @@ void maybe_mons_speaks(monster* mons)
     if (mons->attitude == ATT_NEUTRAL)
         return;
 
-    // AI companion: Hepliaklqana ancestor speaks via RAG + LLM pipeline
+    // AI companion: Hepliaklqana ancestor — claude -p driven actions + movement
     if (mons_is_hepliaklqana_ancestor(mons->type))
     {
         // Capture current game state
         ai_companion::GameState gs = ai_companion::capture_game_state();
 
-        // Build a context string from what triggered this speech opportunity.
-        // Use visible threats as the primary trigger if present, otherwise
-        // generate a generic ambient prompt.
+        // Build context from visible threats or ambient exploration
         std::string trigger_input;
         if (!gs.visible_threats.empty())
         {
@@ -370,23 +368,25 @@ void maybe_mons_speaks(monster* mons)
                 if (i > 0) trigger_input += ", ";
                 trigger_input += gs.visible_threats[i];
             }
-            trigger_input += " nearby.";
+            trigger_input += " nearby. What direction should I move or who should I attack?";
         }
         else
         {
-            trigger_input = "The dungeon is quiet. What should I do next?";
+            trigger_input = "The dungeon is quiet. Which direction should I explore?";
         }
 
-        // Run the full pipeline: embed -> RAG -> LLM -> parse
+        // Run claude -p pipeline with direction support
         auto response = ai_companion::run_companion_pipeline(trigger_input, gs);
 
-        // Dispatch based on action
+        // Dispatch speech action
         std::vector<std::string> action_log;
         ai_companion::dispatch_action(
             response.action, response.chat, response.payload, action_log);
 
-        // The dispatch_action (production path) handles mpr internally.
-        // In test mode it just logs. Either way we're done.
+        // Log directional decision for observation
+        fprintf(stderr, "[AI_COMPANION] DIRECTION:%s (from claude -p)\n",
+                response.direction.c_str());
+
         return;
     }
 

@@ -168,14 +168,13 @@ static inline std::string build_prompt(const GameState& gs,
     std::string prompt;
     prompt += "System: You are " + gs.ancestor_name +
               ", a Hepliaklqana ancestor companion in Dungeon Crawl Stone Soup. "
-              "You are a wise guide who helps the player navigate the dungeon. "
+              "You are a secondary character on screen who actively fights and moves. "
               "Respond ONLY in valid JSON matching the schema below. "
               "Be concise (max 2 sentences for chat). Stay in character.\n\n";
 
     if (!lore_context.empty())
     {
-        prompt += "Context (Lore from game manual):\n";
-        // Truncate lore to avoid overwhelming the 4b model context window
+        prompt += "Context (Lore):\n";
         std::string trimmed_lore = lore_context.substr(0, 2048);
         prompt += trimmed_lore + "\n\n";
     }
@@ -187,8 +186,61 @@ static inline std::string build_prompt(const GameState& gs,
               "  \"chat\": \"<string: your dialogue line>\",\n"
               "  \"action\": \"<one of: CHAT, GRANT_REWARD, QUEST_LOG, "
               "WARN_THREAT, HEAL_SUGGEST, LORE_CITE>\",\n"
+              "  \"direction\": \"<one of: N, S, E, W, NE, NW, SE, SW, "
+              "ATTACK_<target_name>, STAY, FOLLOW>\",\n"
               "  \"payload\": \"<string: action-specific data, empty for CHAT>\"\n"
-              "}\n";
+              "}\n\n"
+              "DIRECTION RULES:\n"
+              "- If enemies are visible, use ATTACK_<nearest_threat_name>\n"
+              "- If no enemies, move toward unexplored areas (prefer directions with floor '.')\n"
+              "- Use FOLLOW to stay near the player\n"
+              "- Use STAY if holding position is tactically best\n";
+
+    return prompt;
+}
+
+// ---------------------------------------------------------------------------
+// Screen-aware prompt builder — includes parsed ASCII screen state
+// ---------------------------------------------------------------------------
+static inline std::string build_screen_prompt(const GameState& gs,
+                                               const std::string& screen_dump,
+                                               const std::string& player_input)
+{
+    json state_json = state_to_json(gs);
+
+    std::string prompt;
+    prompt += "System: You are " + gs.ancestor_name +
+              ", a Hepliaklqana ancestor companion on screen in DCSS. "
+              "You are a secondary character who moves and fights autonomously. "
+              "Analyze the ASCII map below and choose your next move. "
+              "Respond ONLY in valid JSON. Be concise.\n\n";
+
+    prompt += "Context (Lore):\n" + std::string(LORE_CONTEXT) + "\n\n";
+    prompt += "Game State:\n" + state_json.dump(2) + "\n\n";
+
+    if (!screen_dump.empty())
+    {
+        prompt += "ASCII Map (@ = player, uppercase = monsters, . = floor, # = wall):\n";
+        // Truncate to avoid massive prompts
+        prompt += screen_dump.substr(0, 2000) + "\n\n";
+    }
+
+    prompt += "Player Input: \"" + player_input + "\"\n\n";
+    prompt += "Respond in exactly this JSON schema:\n"
+              "{\n"
+              "  \"chat\": \"<string: your dialogue line>\",\n"
+              "  \"action\": \"<one of: CHAT, WARN_THREAT, HEAL_SUGGEST, ATTACK>\",\n"
+              "  \"direction\": \"<one of: N, S, E, W, NE, NW, SE, SW, "
+              "ATTACK_<target>, STAY, FOLLOW>\",\n"
+              "  \"payload\": \"<string: action-specific data>\"\n"
+              "}\n\n"
+              "DIRECTION RULES:\n"
+              "- ATTACK_<name>: engage the named monster\n"
+              "- N/S/E/W/NE/NW/SE/SW: move in that direction\n"
+              "- FOLLOW: stay adjacent to the player @\n"
+              "- STAY: hold current position\n"
+              "Choose based on the map: attack if enemies are close, "
+              "move toward open areas if exploring, follow player if far away.\n";
 
     return prompt;
 }
@@ -201,16 +253,52 @@ struct CompanionResponse
 {
     std::string chat;
     AncestorAction action;
+    std::string direction;     // N/S/E/W/NE/NW/SE/SW/ATTACK_<target>/STAY/FOLLOW
     std::string payload;
     double llm_ms = 0;
 };
 
+// ---------------------------------------------------------------------------
+// Direction → DCSS key mapping
+// ---------------------------------------------------------------------------
+static inline char direction_to_key(const std::string& dir)
+{
+    // DCSS vi-key movement
+    if (dir == "N")  return 'k';
+    if (dir == "S")  return 'j';
+    if (dir == "E")  return 'l';
+    if (dir == "W")  return 'h';
+    if (dir == "NE") return 'u';
+    if (dir == "NW") return 'y';
+    if (dir == "SE") return 'n';
+    if (dir == "SW") return 'b';
+    if (dir == "STAY") return '.';
+    if (dir == "FOLLOW") return 'k'; // default: move toward player (north)
+    return '.'; // default: wait
+}
+
+static inline bool is_attack_direction(const std::string& dir)
+{
+    return dir.substr(0, 7) == "ATTACK_";
+}
+
+static inline std::string attack_target(const std::string& dir)
+{
+    if (is_attack_direction(dir))
+        return dir.substr(7);
+    return "";
+}
+
+// ---------------------------------------------------------------------------
+// Main pipeline: input → prompt → claude -p → parse → dispatch
+// ---------------------------------------------------------------------------
 static inline CompanionResponse run_companion_pipeline(const std::string& player_input,
                                                         const GameState& state)
 {
     CompanionResponse resp;
-    resp.action = AncestorAction::CHAT;
-    resp.chat   = "I sense the dungeon stirs...";
+    resp.action    = AncestorAction::CHAT;
+    resp.direction = "FOLLOW";
+    resp.chat      = "I sense the dungeon stirs...";
 
     // --- Step 1: Build prompt with inline lore context ---
     std::string prompt = build_prompt(state, std::string(LORE_CONTEXT), player_input);
@@ -224,18 +312,61 @@ static inline CompanionResponse run_companion_pipeline(const std::string& player
     // --- Step 3: Parse response ---
     try
     {
-        resp.chat    = result.value("chat", resp.chat);
+        resp.chat      = result.value("chat", resp.chat);
         std::string act_str = result.value("action", std::string("CHAT"));
-        resp.action  = parse_action(act_str);
-        resp.payload = result.value("payload", std::string(""));
+        resp.action    = parse_action(act_str);
+        resp.direction = result.value("direction", std::string("FOLLOW"));
+        resp.payload   = result.value("payload", std::string(""));
     }
     catch (const std::exception& e)
     {
         fprintf(stderr, "[AI_COMPANION] parse error in pipeline: %s\n", e.what());
     }
 
-    fprintf(stderr, "[AI_COMPANION] pipeline: claude_p=%.1fms action=%s\n",
-            resp.llm_ms, action_to_string(resp.action).c_str());
+    fprintf(stderr, "[AI_COMPANION] pipeline: claude_p=%.1fms action=%s dir=%s\n",
+            resp.llm_ms, action_to_string(resp.action).c_str(),
+            resp.direction.c_str());
+
+    return resp;
+}
+
+// ---------------------------------------------------------------------------
+// Screen-aware pipeline: uses parsed screen dump for spatial reasoning
+// ---------------------------------------------------------------------------
+static inline CompanionResponse run_screen_pipeline(const std::string& screen_dump,
+                                                     const std::string& player_input,
+                                                     const GameState& state)
+{
+    CompanionResponse resp;
+    resp.action    = AncestorAction::CHAT;
+    resp.direction = "FOLLOW";
+    resp.chat      = "I sense the dungeon stirs...";
+
+    // Build screen-aware prompt
+    std::string prompt = build_screen_prompt(state, screen_dump, player_input);
+
+    // Query via claude -p
+    auto t0 = std::chrono::steady_clock::now();
+    json result = ClaudeOrchestrator::instance().query_json(prompt);
+    auto t1 = std::chrono::steady_clock::now();
+    resp.llm_ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
+
+    try
+    {
+        resp.chat      = result.value("chat", resp.chat);
+        std::string act_str = result.value("action", std::string("CHAT"));
+        resp.action    = parse_action(act_str);
+        resp.direction = result.value("direction", std::string("FOLLOW"));
+        resp.payload   = result.value("payload", std::string(""));
+    }
+    catch (const std::exception& e)
+    {
+        fprintf(stderr, "[AI_COMPANION] screen parse error: %s\n", e.what());
+    }
+
+    fprintf(stderr, "[AI_COMPANION] screen_pipeline: claude_p=%.1fms action=%s dir=%s\n",
+            resp.llm_ms, action_to_string(resp.action).c_str(),
+            resp.direction.c_str());
 
     return resp;
 }
