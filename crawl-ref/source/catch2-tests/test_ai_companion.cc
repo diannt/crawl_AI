@@ -324,10 +324,11 @@ TEST_CASE("run_companion_pipeline returns valid CompanionResponse", "[companion]
     REQUIRE(static_cast<int>(resp.action) >= 0);
     REQUIRE(static_cast<int>(resp.action) < static_cast<int>(AncestorAction::NUM_ACTIONS));
 
-    // Latency fields should be non-negative
-    REQUIRE(resp.embed_ms  >= 0.0);
-    REQUIRE(resp.search_ms >= 0.0);
+    // Latency field should be non-negative
     REQUIRE(resp.llm_ms    >= 0.0);
+
+    // Direction field should be populated (default FOLLOW)
+    REQUIRE(!resp.direction.empty());
 }
 
 TEST_CASE("pipeline produces JSON-valid action field", "[companion][pipeline]")
@@ -385,19 +386,40 @@ TEST_CASE("pipeline handles quiet dungeon input", "[companion][pipeline]")
     REQUIRE(!resp.chat.empty());
 }
 
-TEST_CASE("pipeline latency fields are populated", "[companion][pipeline]")
+TEST_CASE("pipeline latency and direction fields are populated", "[companion][pipeline]")
 {
     setenv("AI_CLIENT_DRY_RUN", "1", 1);
 
     GameState gs = capture_game_state();
     auto resp = run_companion_pipeline("test", gs);
 
-    // All three latency fields should be >= 0 (dry run is near-instant)
-    REQUIRE(resp.embed_ms  >= 0.0);
-    REQUIRE(resp.search_ms >= 0.0);
-    REQUIRE(resp.llm_ms    >= 0.0);
+    // claude -p latency should be >= 0 (test mode is near-instant)
+    REQUIRE(resp.llm_ms >= 0.0);
 
-    // Total should be sum of parts
-    double total = resp.embed_ms + resp.search_ms + resp.llm_ms;
-    REQUIRE(total >= 0.0);
+    // Direction should default to FOLLOW in test mode
+    REQUIRE(!resp.direction.empty());
+}
+
+TEST_CASE("direction_to_key maps correctly", "[companion][direction]")
+{
+    REQUIRE(direction_to_key("N")  == 'k');
+    REQUIRE(direction_to_key("S")  == 'j');
+    REQUIRE(direction_to_key("E")  == 'l');
+    REQUIRE(direction_to_key("W")  == 'h');
+    REQUIRE(direction_to_key("NE") == 'u');
+    REQUIRE(direction_to_key("NW") == 'y');
+    REQUIRE(direction_to_key("SE") == 'n');
+    REQUIRE(direction_to_key("SW") == 'b');
+    REQUIRE(direction_to_key("STAY") == '.');
+}
+
+TEST_CASE("attack direction parsing", "[companion][direction]")
+{
+    REQUIRE(is_attack_direction("ATTACK_orc") == true);
+    REQUIRE(is_attack_direction("ATTACK_giant_spider") == true);
+    REQUIRE(is_attack_direction("N") == false);
+    REQUIRE(is_attack_direction("FOLLOW") == false);
+    REQUIRE(attack_target("ATTACK_orc") == "orc");
+    REQUIRE(attack_target("ATTACK_giant_spider") == "giant_spider");
+    REQUIRE(attack_target("N") == "");
 }
