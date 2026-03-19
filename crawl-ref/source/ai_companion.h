@@ -124,6 +124,12 @@ static inline void dispatch_companion_movement(monster*, const std::string& dire
     fprintf(stderr, "[AI_COMPANION] TEST_MOVE:%s\n", direction.c_str());
 }
 
+// Test stub for commentary dispatch
+static inline void dispatch_commentary(const std::string& commentary)
+{
+    fprintf(stderr, "[AI_COMPANION] TEST_COMMENTARY:%s\n", commentary.c_str());
+}
+
 #else
 // ---- Production: real engine calls (compiled only with game engine) ----
 
@@ -136,9 +142,11 @@ void dispatch_action(AncestorAction action,
                      std::vector<std::string>& log_out);
 
 // Phase 2: Movement dispatch — sets monster target based on claude -p direction
-// Requires a pointer to the ancestor monster (from mon-speak.cc)
 struct monster;  // forward declaration for engine-only builds
 void dispatch_companion_movement(monster* mons, const std::string& direction);
+
+// Phase 3: Commentary dispatch — outputs conversational text to message log
+void dispatch_commentary(const std::string& commentary);
 
 #endif
 
@@ -255,6 +263,111 @@ static inline std::string build_screen_prompt(const GameState& gs,
               "move toward open areas if exploring, follow player if far away.\n";
 
     return prompt;
+}
+
+// ---------------------------------------------------------------------------
+// Commentary prompt — purely conversational, discusses screen context
+// ---------------------------------------------------------------------------
+static inline std::string build_commentary_prompt(const GameState& gs,
+                                                    const std::string& screen_context)
+{
+    json state_json = state_to_json(gs);
+
+    std::string prompt;
+    prompt += "System: You are " + gs.ancestor_name +
+              ", a Hepliaklqana ancestor companion in Dungeon Crawl Stone Soup. "
+              "You are having a conversation with the player about what you see. "
+              "Discuss the current situation: nearby monsters, quests, items, "
+              "dungeon features, tactical advice, or lore. "
+              "Respond ONLY in valid JSON. Be in character. Max 2 sentences.\n\n";
+
+    prompt += "Lore Context:\n" + std::string(LORE_CONTEXT) + "\n\n";
+    prompt += "Game State:\n" + state_json.dump(2) + "\n\n";
+
+    if (!screen_context.empty())
+        prompt += "What you see:\n" + screen_context + "\n\n";
+
+    prompt += "Respond in exactly this JSON schema:\n"
+              "{\n"
+              "  \"commentary\": \"<string: your 1-2 sentence observation about "
+              "the environment, quest, monsters, or tactical situation>\"\n"
+              "}\n";
+
+    return prompt;
+}
+
+// ---------------------------------------------------------------------------
+// Commentary response struct + pipeline
+// ---------------------------------------------------------------------------
+struct CommentaryResponse
+{
+    std::string commentary;
+    double llm_ms = 0;
+    bool success = false;
+};
+
+static inline CommentaryResponse run_commentary_pipeline(const GameState& state)
+{
+    CommentaryResponse resp;
+    resp.commentary = "";
+
+    // Build context description from game state
+    std::string context;
+    if (!state.visible_threats.empty())
+    {
+        context += "Visible enemies: ";
+        for (size_t i = 0; i < state.visible_threats.size(); ++i)
+        {
+            if (i > 0) context += ", ";
+            context += state.visible_threats[i];
+        }
+        context += ". ";
+    }
+    else
+    {
+        context += "No enemies in sight. ";
+    }
+
+    context += "Location: " + state.location + ". ";
+    context += "HP: " + std::to_string(state.player_hp) + "/"
+             + std::to_string(state.player_hp_max) + ". ";
+    context += "Turn: " + std::to_string(state.turn) + ". ";
+
+    if (!state.inventory.empty())
+    {
+        context += "Carrying: ";
+        size_t count = std::min(state.inventory.size(), (size_t)5);
+        for (size_t i = 0; i < count; ++i)
+        {
+            if (i > 0) context += ", ";
+            context += state.inventory[i];
+        }
+        context += ". ";
+    }
+
+    // Build and query
+    std::string prompt = build_commentary_prompt(state, context);
+
+    auto t0 = std::chrono::steady_clock::now();
+    json result = ClaudeOrchestrator::instance().query_json(prompt);
+    auto t1 = std::chrono::steady_clock::now();
+    resp.llm_ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
+
+    try
+    {
+        resp.commentary = result.value("commentary",
+                            result.value("chat", std::string("")));
+        resp.success = !resp.commentary.empty();
+    }
+    catch (const std::exception& e)
+    {
+        fprintf(stderr, "[AI_COMPANION] commentary parse error: %s\n", e.what());
+    }
+
+    fprintf(stderr, "[AI_COMPANION] commentary: %.1fms success=%s\n",
+            resp.llm_ms, resp.success ? "yes" : "no");
+
+    return resp;
 }
 
 // ---------------------------------------------------------------------------

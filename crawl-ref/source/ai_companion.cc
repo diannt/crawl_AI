@@ -95,6 +95,17 @@ void dispatch_action(AncestorAction action,
 }
 
 // ---------------------------------------------------------------------------
+// Commentary dispatch — outputs conversational text to DCSS message log
+// ---------------------------------------------------------------------------
+void dispatch_commentary(const std::string& commentary)
+{
+    if (commentary.empty()) return;
+    const std::string& name = cached_ancestor_name();
+    mprf(MSGCH_PLAIN, "Companion says: %s", commentary.c_str());
+    fprintf(stderr, "[AI_COMPANION] COMMENTARY: %s\n", commentary.c_str());
+}
+
+// ---------------------------------------------------------------------------
 // Direction → coord_def delta mapping
 // ---------------------------------------------------------------------------
 static coord_def direction_to_delta(const std::string& dir)

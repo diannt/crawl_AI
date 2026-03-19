@@ -386,6 +386,12 @@ void maybe_mons_speaks(monster* mons)
         // Apply directional movement to the ancestor monster
         ai_companion::dispatch_companion_movement(mons, response.direction);
 
+        // Run commentary pipeline for contextual flavor text
+        // (separate from action/direction — discusses environment)
+        auto commentary = ai_companion::run_commentary_pipeline(gs);
+        if (commentary.success)
+            ai_companion::dispatch_commentary(commentary.commentary);
+
         return;
     }
 
